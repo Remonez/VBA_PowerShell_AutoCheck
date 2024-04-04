@@ -1,0 +1,40 @@
+Sub CheckExcelFile()
+    Dim targetDate As Date
+    Dim lastRow As Long
+    Dim currentRow As Long
+    Dim conditionMet As Boolean
+
+    ' Set the target date for tomorrow
+    targetDate = Date + 2 ' Change to +1 for tomorrow
+
+    ' Initialize the conditionMet variable
+    conditionMet = False
+
+    ' Find the last row in column B
+    lastRow = Cells(Rows.Count, 2).End(xlUp).Row
+
+    ' Loop through each row in column B
+    For currentRow = 1 To lastRow
+        ' Get the date from the current row of column B
+        Dim currentDate As Variant
+        currentDate = Cells(currentRow, 2).Value
+
+        ' Check if the value in column B is a valid date
+        If IsDate(currentDate) Then
+            ' Check if the date in column B is exactly tomorrow
+            If Int(currentDate) = targetDate Then
+                ' Display a message for each row that meets the condition
+                MsgBox "The date in row " & currentRow & " is after tomorrow!", vbInformation, "Date Check"
+                
+                ' Set the conditionMet variable to True
+                conditionMet = True
+            End If
+        End If
+    Next currentRow
+
+    ' Check the conditionMet variable
+    If Not conditionMet Then
+        ' If the condition wasn't met, you can close Excel here
+        Application.Quit
+    End If
+End Sub
