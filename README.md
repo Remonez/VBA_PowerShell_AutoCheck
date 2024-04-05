@@ -6,9 +6,9 @@ This project automates the process of checking for dates coming up in Excel file
 
 1. **Insert VBA Code:** Copy and paste the provided VBA code into the Excel file that you want to check for upcoming dates and check the date column.
 
-2. **Modify File Paths:** Open the shell script and batch file and update the directory paths as needed to point to the Excel file you want to monitor.
+2. **Modify File Paths:** Open the shell script and VBS file and update the directory paths as needed to point to the Excel file you want to monitor.
 
-3. **Set Up Startup Program:** Create a shortcut to the batch file and place it in the Windows startup program folder. This will ensure that the background process runs automatically when Windows starts.
+3. **Set Up Startup Program:** Create a shortcut to the VBS file and place it in the Windows startup program folder. This will ensure that the background process runs automatically when Windows starts.
 
     - **Alternative:** Alternatively, you can use Task Scheduler to schedule the batch file to run at system startup.
 
