@@ -3,12 +3,16 @@ Sub CheckExcelFile()
     Dim lastRow As Long
     Dim currentRow As Long
     Dim conditionMet As Boolean
-
-    ' Set the target date for tomorrow
+    Dim rowsAfterTomorrow As String
+    
+    ' Set the target date for the day after tomorrow
     targetDate = Date + 2 ' Change to +1 for tomorrow
 
     ' Initialize the conditionMet variable
     conditionMet = False
+    
+    ' Initialize the variable to store rows with dates after tomorrow
+    rowsAfterTomorrow = ""
 
     ' Find the last row in column B
     lastRow = Cells(Rows.Count, 2).End(xlUp).Row
@@ -21,10 +25,10 @@ Sub CheckExcelFile()
 
         ' Check if the value in column B is a valid date
         If IsDate(currentDate) Then
-            ' Check if the date in column B is exactly tomorrow
-            If Int(currentDate) = targetDate Then
-                ' Display a message for each row that meets the condition
-                MsgBox "The date in row " & currentRow & " is after tomorrow!", vbInformation, "Date Check"
+            ' Check if the date in column B is after tomorrow
+            If currentDate = targetDate Then
+                ' Add the current row to the list of rows after tomorrow
+                rowsAfterTomorrow = rowsAfterTomorrow & "Row " & currentRow & vbCrLf
                 
                 ' Set the conditionMet variable to True
                 conditionMet = True
@@ -33,8 +37,12 @@ Sub CheckExcelFile()
     Next currentRow
 
     ' Check the conditionMet variable
-    If Not conditionMet Then
+    If conditionMet Then
+        ' Display a message with all rows after tomorrow
+        MsgBox "The following dates are after tomorrow:" & vbCrLf & rowsAfterTomorrow, vbInformation, "Date Check"
+    Else
         ' If the condition wasn't met, you can close Excel here
         Application.Quit
     End If
 End Sub
+
