@@ -1,18 +1,20 @@
 Sub CheckExcelFile()
-    Dim targetDate As Date
+    Dim targetDateTomorrow As Date
+    Dim targetDateDayAfterTomorrow As Date
     Dim lastRow As Long
     Dim currentRow As Long
+    Dim tomorrowRows As String
+    Dim afterTomorrowRows As String
     Dim conditionMet As Boolean
-    Dim rowsAfterTomorrow As String
-    
-    ' Set the target date for the day after tomorrow
-    targetDate = Date + 2 ' Change to +1 for tomorrow
 
-    ' Initialize the conditionMet variable
+    ' Set the target dates for tomorrow and the day after tomorrow
+    targetDateTomorrow = Date + 1
+    targetDateDayAfterTomorrow = Date + 2
+
+    ' Initialize variables
+    tomorrowRows = ""
+    afterTomorrowRows = ""
     conditionMet = False
-    
-    ' Initialize the variable to store rows with dates after tomorrow
-    rowsAfterTomorrow = ""
 
     ' Find the last row in column B
     lastRow = Cells(Rows.Count, 2).End(xlUp).Row
@@ -25,24 +27,39 @@ Sub CheckExcelFile()
 
         ' Check if the value in column B is a valid date
         If IsDate(currentDate) Then
-            ' Check if the date in column B is after tomorrow
-            If currentDate = targetDate Then
-                ' Add the current row to the list of rows after tomorrow
-                rowsAfterTomorrow = rowsAfterTomorrow & "Row " & currentRow & vbCrLf
-                
-                ' Set the conditionMet variable to True
+            ' Check if the date in column B is tomorrow or the day after tomorrow
+            If currentDate = targetDateTomorrow Then
+                ' Add the current row to the list of rows for tomorrow
+                tomorrowRows = tomorrowRows & "Row " & currentRow & vbCrLf
+                conditionMet = True
+            ElseIf currentDate = targetDateDayAfterTomorrow Then
+                ' Add the current row to the list of rows for the day after tomorrow
+                afterTomorrowRows = afterTomorrowRows & "Row " & currentRow & vbCrLf
                 conditionMet = True
             End If
         End If
     Next currentRow
 
-    ' Check the conditionMet variable
+    ' Check if any condition was met
     If conditionMet Then
-        ' Display a message with all rows after tomorrow
-        MsgBox "The following dates are after tomorrow:" & vbCrLf & rowsAfterTomorrow, vbInformation, "Date Check"
+        ' Prepare the message
+        Dim message As String
+        message = "The following dates are found:" & vbCrLf
+        
+        ' Add rows for tomorrow, if any
+        If tomorrowRows <> "" Then
+            message = message & vbCrLf & "Tomorrow:" & vbCrLf & tomorrowRows
+        End If
+        
+        ' Add rows for the day after tomorrow, if any
+        If afterTomorrowRows <> "" Then
+            message = message & vbCrLf & "After Tomorrow:" & vbCrLf & afterTomorrowRows
+        End If
+        
+        ' Display the message
+        MsgBox message, vbInformation, "Date Check"
     Else
-        ' If the condition wasn't met, you can close Excel here
+        ' If no dates were found, you can close Excel here
         Application.Quit
     End If
 End Sub
-
