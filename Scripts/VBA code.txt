@@ -1,19 +1,23 @@
 Sub CheckExcelFile()
     Dim targetDateTomorrow As Date
     Dim targetDateDayAfterTomorrow As Date
+    Dim targetDateDayAfterTwodays As Date
     Dim lastRow As Long
     Dim currentRow As Long
-    Dim tomorrowRows As String
-    Dim afterTomorrowRows As String
+    Dim tomorrowValues As String
+    Dim afterTomorrowValues As String
+    Dim afterTwodaysValues As String
     Dim conditionMet As Boolean
 
-    ' Set the target dates for tomorrow and the day after tomorrow
+    ' Set the target dates for tomorrow, the day after tomorrow, and two days after tomorrow
     targetDateTomorrow = Date + 1
     targetDateDayAfterTomorrow = Date + 2
+    targetDateDayAfterTwodays = Date + 3
 
     ' Initialize variables
-    tomorrowRows = ""
-    afterTomorrowRows = ""
+    tomorrowValues = ""
+    afterTomorrowValues = ""
+    afterTwodaysValues = ""
     conditionMet = False
 
     ' Find the last row in column B
@@ -27,14 +31,18 @@ Sub CheckExcelFile()
 
         ' Check if the value in column B is a valid date
         If IsDate(currentDate) Then
-            ' Check if the date in column B is tomorrow or the day after tomorrow
+            ' Check if the date in column B is tomorrow, the day after tomorrow, or two days after tomorrow
             If currentDate = targetDateTomorrow Then
-                ' Add the current row to the list of rows for tomorrow
-                tomorrowRows = tomorrowRows & "Row " & currentRow & vbCrLf
+                ' Add the value from column A corresponding to the current row to the list of values for tomorrow
+                tomorrowValues = tomorrowValues & "Value: " & Cells(currentRow, 1).Value & vbCrLf
                 conditionMet = True
             ElseIf currentDate = targetDateDayAfterTomorrow Then
-                ' Add the current row to the list of rows for the day after tomorrow
-                afterTomorrowRows = afterTomorrowRows & "Row " & currentRow & vbCrLf
+                ' Add the value from column A corresponding to the current row to the list of values for the day after tomorrow
+                afterTomorrowValues = afterTomorrowValues & "Value: " & Cells(currentRow, 1).Value & vbCrLf
+                conditionMet = True
+            ElseIf currentDate = targetDateDayAfterTwodays Then
+                ' Add the value from column A corresponding to the current row to the list of values for two days after tomorrow
+                afterTwodaysValues = afterTwodaysValues & "Value: " & Cells(currentRow, 1).Value & vbCrLf
                 conditionMet = True
             End If
         End If
@@ -46,14 +54,19 @@ Sub CheckExcelFile()
         Dim message As String
         message = "The following dates are found:" & vbCrLf
         
-        ' Add rows for tomorrow, if any
-        If tomorrowRows <> "" Then
-            message = message & vbCrLf & "Tomorrow:" & vbCrLf & tomorrowRows
+        ' Add values for tomorrow, if any
+        If tomorrowValues <> "" Then
+            message = message & vbCrLf & "Tomorrow:" & vbCrLf & tomorrowValues
         End If
         
-        ' Add rows for the day after tomorrow, if any
-        If afterTomorrowRows <> "" Then
-            message = message & vbCrLf & "After Tomorrow:" & vbCrLf & afterTomorrowRows
+        ' Add values for the day after tomorrow, if any
+        If afterTomorrowValues <> "" Then
+            message = message & vbCrLf & "After Tomorrow:" & vbCrLf & afterTomorrowValues
+        End If
+        
+        ' Add values after two days, if any
+        If afterTwodaysValues <> "" Then
+            message = message & vbCrLf & "After two days:" & vbCrLf & afterTwodaysValues
         End If
         
         ' Display the message
